@@ -1,20 +1,28 @@
-const { response } = require('express')
+const { response, request } = require('express')
 
-const usuariosGet = (req, res = response) => {
+const usuariosGet = (req = request, res = response) => {
+    const { nombre = 'No name', edad } = req.query;
+
     res.json({
-        msg: "get API - controlador"
+        msg: "get API - controlador",
+        nombre,
+        edad
     });
 }
 
 const usuariosPost = (req, res = response) => {
+    const body = req.body;
     res.json({
-        msg: "post API - controlador"
+        body
     });
 }
 
 const usuariosPut = (req, res = response) => {
+    const id = req.params.id;
+    //Parametros de segmento -> /route/:id
     res.json({
-        msg: "put API - controlador"
+        msg: "put API - controlador",
+        id
     });
 }
 
