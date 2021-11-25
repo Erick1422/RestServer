@@ -63,7 +63,7 @@ const actualizarCategoria = async (req, res) => {
     data.nombre = data.nombre.toUpperCase();
     data.usuario = req.user._id;
 
-    const categoriaDB = await Categoria.findOne({ nombre });
+    const categoriaDB = await Categoria.findOne({ nombre: data.nombre });
     if (categoriaDB) {
         return res.status(400).json({
             msg: `La categoría ${categoriaDB.nombre} ya existe`
