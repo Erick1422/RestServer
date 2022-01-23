@@ -1,5 +1,6 @@
 
 const { response } = require('express');
+const { isValidObjectId } = require('mongoose')
 const { Producto } = require('../models');
 
 const crearProducto = async (req, res = response) => {
@@ -71,7 +72,16 @@ const actualizarProducto = async (req, res) => {
         data.nombre = data.nombre.toUpperCase();
     }
     data.usuario = req.user._id;
-
+    /* 
+    if (data.categoria) {
+        console.log('No hay');
+        if (!isValidObjectId(data.categoria) || data.categoria === "") {
+            return res.status(400).json({
+                msg: 'La categoría no es un id válido'
+            });
+        }
+        //Comprobar si la categoria existe, analizar si hacerlo en forma de middeware o helper
+    } */
     //Se asigna en true para que envíe el documento con la actualización
     const producto = await Producto.findByIdAndUpdate(req.params.id, data, { new: true })
     res.status(200).json({
