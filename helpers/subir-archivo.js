@@ -6,7 +6,7 @@ const subirArchivo = (files, extensionesValidas = ['png', 'jpg', 'jpeg', 'gif'],
     return new Promise((resolve, reject) => {
 
         const { archivo } = files;
-        const nombreCortado = archivo.name.split('.');
+        const nombreCortado = archivo.name.split('.'); //Separar el nombre de la extensión
         const extension = nombreCortado[nombreCortado.length - 1];
 
         if (!extensionesValidas.includes(extension)) {
@@ -16,6 +16,7 @@ const subirArchivo = (files, extensionesValidas = ['png', 'jpg', 'jpeg', 'gif'],
         const nombreTemp = uuidv4() + '.' + extension;
         const uploadPath = path.join(__dirname, '../uploads/', carpeta, nombreTemp);
 
+        //Function de fileupload para guardar el archivo
         archivo.mv(uploadPath, (err) => {
             if (err) {
                 console.log(err)

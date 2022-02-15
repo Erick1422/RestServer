@@ -21,4 +21,10 @@ router.get('/:coleccion/:id', [
     validarCampos
 ], mostrarArchivo);
 
+router.get('/:coleccion/:id', [
+    check('id', 'El id debe ser de mongodb').isMongoId(),
+    check('coleccion').custom(c => coleccionesPermitidas(c, ['usuarios', 'productos'])),
+    validarCampos
+], mostrarArchivo);
+
 module.exports = router;

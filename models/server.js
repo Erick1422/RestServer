@@ -8,7 +8,7 @@ class Server {
 
     constructor () {
         this.app = express();
-        this.port = process.env.PORT;
+        this.port = process.env.PORT || 8080;
 
         this.paths = {
             auth: '/api/auth',
@@ -33,7 +33,6 @@ class Server {
     }
 
     middlewares() {
-
         //CORS
         this.app.use( cors() );
 
