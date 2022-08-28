@@ -5,71 +5,50 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Google Sign in</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 </head>
 
-<body>
-    <h1>Google Sign in</h1>
-    <div id="g_id_onload" 
-        data-client_id="777016332219-3hjkb5dqa8t3sdro0bn1kkccqotjtece.apps.googleusercontent.com"
-        data-auto_prompt="false"
-        data-auto_select="true"
-        data-callback="handleCredentialResponse">
+<body class="container">
+
+    <div class="row mt-5">
+        <div class="col-sm-6">
+            <h1>Google Sign in</h1>
+            <hr>
+            <br>
+            <div id="g_id_onload"
+                data-client_id="777016332219-3hjkb5dqa8t3sdro0bn1kkccqotjtece.apps.googleusercontent.com"
+                data-auto_prompt="false" data-auto_select="true" data-callback="handleCredentialResponse">
+            </div>
+            <div class="g_id_signin" data-type="standard" data-size="large" data-theme="outline"
+                data-text="sign_in_with" data-shape="rectangular" data-logo_alignment="left">
+            </div>
+            <br>
+            <button id="google_signout" class="btn btn-danger">
+                Cerrar sesión
+            </button>
+
+        </div>
+
+        <div class="col-sm-6">
+            <form>
+                <h1>Inicio de sesión normal</h1>
+                <hr>
+                <br>
+                <input type="text" name="correo" class="form-control mb-2" placeholder="correo">
+                <input type="password" name="password" class="form-control mb-2" placeholder="password" id="">
+                <button class="btn btn-primary" type="submit">
+                    Ingresar
+                </button>
+            </form>
+        </div>
+
+
+
     </div>
-    <div class="g_id_signin"
-        data-type="standard"
-        data-size="large" 
-        data-theme="outline" 
-        data-text="sign_in_with"
-        data-shape="rectangular" 
-        data-logo_alignment="left">
-    </div>
 
-    <button id="google_signout">
-        signout
-    </button>
-
-    <script>
-        console.log(window.location.hostname.includes('localhost'));
-
-        let url = ( window.location.hostname.includes('localhost'))
-                ? 'http://localhost:8080/api/auth/google'
-                : 'https://nodeapp-cafe.herokuapp.com/api/auth/google';
-
-        console.log(url);
-        function handleCredentialResponse(response) {
-            //Google TOken : ID_TOKEN
-            // console.log('id_token', response.credential);
-            const body = { id_token: response.credential };
-            fetch( url , {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(body)
-            })
-                .then(resp => resp.json())
-                .then(resp => {
-                    localStorage.setItem('correo', resp.usuario.correo)
-                    console.log(resp)
-                })
-                .catch(console.warn)
-        }
-
-        const button = document.getElementById('google_signout')
-        button.onclick = () => {
-
-            console.log(google.accounts.id)
-            google.accounts.id.disableAutoSelect();
-            google.accounts.id.revoke( localStorage.getItem('correo'), done => {
-                localStorage.clear();
-                location.reload();
-            });
-
-        }
-
-    </script>
+    <script src="./js/auth.js"></script>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
-
 </body>
 
 </html>

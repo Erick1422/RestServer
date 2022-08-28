@@ -54,9 +54,9 @@ const googleSingIn = async (req, res = response) => {
     const { id_token } = req.body
     try {
 
-        const { nombre, correo, img } = await googleVerify( id_token )
+        const { nombre, correo, img } = await googleVerify(id_token)
 
-        let usuario = await Usuario.findOne( {correo} )
+        let usuario = await Usuario.findOne({ correo })
         if (!usuario) {
             //Crearlo
             const data = {
@@ -76,8 +76,8 @@ const googleSingIn = async (req, res = response) => {
             })
         }
 
-         //Generar el JWT
-         const token = await generarJWT(usuario.id)
+        //Generar el JWT
+        const token = await generarJWT(usuario.id)
 
         res.json({
             usuario,
@@ -92,7 +92,24 @@ const googleSingIn = async (req, res = response) => {
     }
 }
 
+const renovarToken = async (req, res) => {
+    try {
+        const { user } = req;
+        // Generar el JWT
+        const token = await generarJWT(user.id)
+
+        res.json({
+            user,
+            token
+        });
+
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 module.exports = {
     login,
-    googleSingIn
+    googleSingIn,
+    renovarToken
 }
