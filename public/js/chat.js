@@ -43,20 +43,20 @@ const conectarSocket = async () => {
         console.log('socket desconectado');
     });
 
-    socket.on('recibir-mensajes', (payload) => {
-        console.log(payload);
-    });
-
+    socket.on('recibir-mensajes', agregarMensajes);
     socket.on('usuarios-activos', agregarUsuarios);
 
-    socket.on('mensaje-privado', () => {
-        //TODO
+    /**
+     * Todo: Se podría mejorar, haciendo clickeable cada usuario y enviarlo a una sala privada
+     */
+    socket.on('mensaje-privado', (payload) => {
+        console.log('privado:', payload);
     });
 }
 
 txtMensaje.addEventListener('keyup', (e) => {
     const mensaje = e.target.value;
-    const uid = '';
+    const uid = txtUid.value;
 
     if (e.keyCode !== 13) return;
     if (mensaje.length === 0) return;
@@ -64,6 +64,7 @@ txtMensaje.addEventListener('keyup', (e) => {
     // Es recomendable siempre enviar un objeto, así sea una sola propiedad
     socket.emit('enviar-mensaje', { mensaje, uid });
     e.target.value = '';
+    txtUid.value = '';
 });
 
 const agregarUsuarios = (usuarios = []) => {
@@ -79,6 +80,21 @@ const agregarUsuarios = (usuarios = []) => {
         `
     });
     ulUsuarios.innerHTML = usersHtml;
+}
+
+const agregarMensajes = (mensajes = []) => {
+    let mensajesHtml = '';
+    mensajes.forEach(({ nombre, mensaje }) => {
+        mensajesHtml += `
+            <li>
+                <p>
+                    <h5 class="text-primary">${nombre}</h5>
+                    <span>${mensaje}</span>
+                </p>
+            </li>
+        `
+    });
+    ulMensajes.innerHTML = mensajesHtml;
 }
 
 const main = async () => {
